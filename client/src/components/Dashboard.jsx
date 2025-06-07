@@ -3,9 +3,9 @@ import React, { useState, useEffect } from "react";
 import TodoList from "./TodoList.jsx";
 import Create from "./Create.jsx";
 
-const receive = async (token) => {
+const receive = async (token, URL) => {
   console.log(token);
-  const result = await axios.get("/api/dashboard", {
+  const result = await axios.get("/api/"+URL+"/dashboard", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -20,10 +20,11 @@ export default function Dashboard(props) {
   const [error, setError] = useState("");
   const [change, setChange] = useState(null);
 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await receive(props.token);
+        const data = await receive(props.token, props.URL);
         console.log(data);
         console.log("Type: ", typeof data);
 
@@ -64,8 +65,8 @@ export default function Dashboard(props) {
         <p>{error}</p>
       ) : (
         <>
-          <TodoList token={props.token} change={handleChange} array={list} />
-          <Create updateList={handleChange} token={props.token} />
+          <TodoList URL={props.URL} token={props.token} change={handleChange} array={list} />
+          <Create URL={props.URL} updateList={handleChange} token={props.token} />
         </>
       )}
     </div>
