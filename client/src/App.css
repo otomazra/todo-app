@@ -1,0 +1,250 @@
+#root {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: 1280px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 2rem;
+  padding-top: 0;
+  padding-bottom: 0;
+  text-align: center;
+}
+
+/* Header styling */
+
+header {
+}
+
+header .logout{
+    height: 45px;
+  color: #213547;
+  border: 1px solid #213547;
+}
+
+header .logout:hover {
+  /* logout button */
+  background-color: #213547;
+  color: whitesmoke;
+}
+
+header .logoNav {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+header .title {
+  display: inline-block;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/* Authorization styling */
+
+main .auth {
+  /* border: solid rgb(68, 68, 252) 10px; */
+  box-shadow: 9px 9px 30px 0px rgba(0, 0, 0, 0.38);
+  -webkit-box-shadow: 9px 9px 30px 0px rgba(0, 0, 0, 0.38);
+  -moz-box-shadow: 9px 9px 30px 0px rgba(0, 0, 0, 0.38);
+  /* border: 2px solid lightblue; */
+  border-radius: 20px;
+  min-height: 200px;
+  height: 400px;
+}
+
+.auth .authButton {
+  height: 100px;
+  font-size: 1.5rem;
+  width: 50%;
+  color: #213547;
+}
+
+.loginButton {
+  border-top-left-radius: 20px;
+}
+
+.registerButton {
+  border-top-right-radius: 20px;
+}
+
+.auth .loginDiv {
+  margin-top: 60px;
+}
+
+.auth .register {
+  margin-top: 30px;
+}
+
+.active {
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+  background-color: #e0e0e0;
+  /* border: 1px solid #ccc; */
+  transition: all 0.2s ease;
+}
+
+.auth {
+  background-color: #e0e0e0;
+  width: 400px;
+}
+
+.loginSubmit {
+  width: 100px;
+  height: 40px;
+  font-size: 1.3rem;
+  color: blue;
+}
+
+.auth form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+form input {
+    margin:0;
+  padding: 0;
+  width: 300px;
+  height: 40px;
+  font-size: 1rem;
+  color: #213547;
+  font-weight: bold;
+  border: 2px solid #213547;
+}
+
+
+/* Dashboard styling */
+
+.dashboard {
+  /* display: flex; */
+  /* flex-direction:column; */
+  /* text-align: center; */
+}
+
+.todoListDiv {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.todoListDiv p {
+  width: 300px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-align: left;
+}
+
+.todoListDiv button {
+  height: 45px;
+  color: #213547;
+  border: 1px solid #213547;
+}
+
+.todoListDiv button:hover {
+  background-color: #213547;
+  color: whitesmoke;
+}
+
+.todoListDiv form {
+  display:flex;
+  gap:10px;
+}
+
+.buttonClass {
+  display: flex;
+  gap: 5px;
+}
+
+/* .updateInput {
+  margin:0;
+  padding: 0;
+  width: 300px;
+  height: 40px;
+  font-size: 1rem;
+  color: #213547;
+  font-weight: bold;
+  border: 2px solid #213547;
+} */
+
+
+/* Create styling (on dashboard page) */
+
+.create form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.create .newTaskInput {
+  margin:0;
+  padding: 0;
+  width: 300px;
+  height: 40px;
+  font-size: 1rem;
+  color: #213547;
+  font-weight: bold;
+  border: 2px solid #213547;
+}
+
+.create button {
+  height: 45px;
+  color: #213547;
+  border: 1px solid #213547;
+  font-size: 1rem;
+}
+
+.create button:hover {
+  background-color: #213547;
+  color: whitesmoke;
+}
+
+.create button:disabled{
+  color: grey;
+  border: 1px solid rgba(128, 128, 128, 0);
+}
+
+.create button:disabled:hover{
+  background-color:whitesmoke;
+  color: grey;
+}
+
+/*
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+} */

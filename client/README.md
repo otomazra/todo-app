@@ -1,0 +1,1 @@
+This is a simple todo app where users can pass authorization (login or register) and write their tasks they think are to be done. There are edit and delete buttons to edit or delete the tasks. This is a first version of this app. More features both programmingwise and visuals are to be added in the future.
