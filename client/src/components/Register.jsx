@@ -21,7 +21,7 @@ export default function Register(props) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const result = await axios.post(`/api/${props.URL}/register`, {
+      const result = await axios.post(`${props.URL}/register`, {
         email: email,
         password: password,
         confirmPassword: confirmPassword,

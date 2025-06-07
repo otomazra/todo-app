@@ -18,7 +18,7 @@ export default function Login(props) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const result = await axios.post(`/api/${props.URL}/login`, {
+      const result = await axios.post(`${props.URL}/login`, {
         email: email,
         password: password,
       });

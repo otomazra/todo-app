@@ -29,7 +29,7 @@ export default function TodoList(props) {
 
   const handleDelete = async (id) => {
     console.log("handleDelete is working");
-    const result = await axios.delete(`/api/${props.URL}/delete/${id}`, {
+    const result = await axios.delete(`${props.URL}/delete/${id}`, {
       headers: {
         Authorization: `Bearer ${props.token}`,
       },
@@ -44,7 +44,7 @@ export default function TodoList(props) {
     event.preventDefault();
     console.log("handleEdit started working");
     const result = await axios.patch(
-      `/api/${props.URL}/update/${id}`,
+      `${props.URL}/update/${id}`,
       {
         newTodo: newTodo,
       },

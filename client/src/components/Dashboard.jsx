@@ -5,7 +5,7 @@ import Create from "./Create.jsx";
 
 const receive = async (token, URL) => {
   console.log(token);
-  const result = await axios.get("/api/"+URL+"/dashboard", {
+  const result = await axios.get(URL+"/dashboard", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
