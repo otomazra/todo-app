@@ -12,7 +12,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authMethod, setAuthMethod] = useState("login");
   const [isActive, setIsActive] = useState("login");
-  const API_URL = import.meta.env.VITE_API_URL;
+  // const API_URL = import.meta.env.VITE_API_URL;
   console.log(token);
   console.log(isAuthenticated);
 
@@ -72,7 +72,9 @@ function App() {
       <Header token={token} onLogout={logOut} />
       <main>
         {isAuthenticated ? (
-          <Dashboard URL={API_URL} token={token} />
+          <Dashboard 
+          // URL={API_URL} 
+          token={token} />
         ) : (
           <div>
             <h3>Please Log in or Register</h3>
@@ -103,9 +105,13 @@ function App() {
               </div>
 
               {authMethod === "login" ? (
-                <Login URL={API_URL} saveToken={saveToken} />
+                <Login 
+                // URL={API_URL}
+                 saveToken={saveToken} />
               ) : (
-                authMethod === "register" && <Register URL={API_URL} saveToken={saveToken} />
+                authMethod === "register" && <Register 
+                // URL={API_URL}
+                 saveToken={saveToken} />
               )}
             </div>
           </div>

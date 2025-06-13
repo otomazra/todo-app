@@ -18,8 +18,9 @@ function Create(props) {
   const addText = async (event) => {
     event.preventDefault();
     try {
-      const result = await axios.post(
-        props.URL + "/create",
+      // const result = await axios.post(
+      //   props.URL + "/create",
+      const result = await axios.post(`api/create`,
         {
           todo: newText,
         },

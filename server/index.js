@@ -20,13 +20,13 @@ env.config();
 console.log(process.env.JWT_SECRET);
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl : {rejectUnauthorized: false,}
-  // host: process.env.DB_HOST,
-  // user: process.env.DB_USER,
-  // password: process.env.DB_PASSWORD,
-  // database: process.env.DB_NAME,
-  // port: process.env.DB_PORT,
+  // connectionString: process.env.DATABASE_URL,
+  // ssl : {rejectUnauthorized: false,}
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT,
 });
 // module.exports = pool
 
@@ -58,19 +58,24 @@ const checkUser = async (userEmail) => {
 };
 
 const enterSystem = async (user) => {
+  console.log("Inside enterSystem with ", user);
   const email = user.email;
   const password = user.password;
   const result = await pool.query("SELECT * FROM users WHERE email=$1", [
     email,
   ]);
+  console.log(result);
   const data = result.rows[0];
   console.log(data);
   if (!data || data == undefined) {
+    console.log("enterSystem: Data is null");
     return null;
   }
 
   const comparison = await comparePassword(password, data.password_hash);
+  console.log(comparison);
   const token = jwtToken({ userId: data.id, email: data.email });
+  console.log(token);
 
   if (!comparison) return null;
   return token;
@@ -126,8 +131,9 @@ app.post(
     body("password").notEmpty().withMessage("Password not typed"),
   ],
   async (req, res) => {
-    // let email = req.body.email;
-    // let password = req.body.password;
+    let email = req.body.email;
+    let password = req.body.password;
+    console.log( email, password);
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -284,6 +290,8 @@ app.patch(
     }
   }
 );
+
+// pool.end();
 
 app.listen(process.env.PORT, () => {
   console.log("Listening to port: " + process.env.PORT);
