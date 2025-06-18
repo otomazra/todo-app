@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect,} from "react";
 import { jwtDecode } from "jwt-decode";
 import Login from "./components/Login.jsx";
 import Register from "./components/Register.jsx";
@@ -6,6 +6,7 @@ import "./App.css";
 import Header from "./components/Header.jsx";
 import Dashboard from "./components/Dashboard.jsx";
 import Footer from "./components/Footer.jsx";
+import {MyContext} from "./components/MyContext.js";
 
 function App() {
   const [token, setToken] = useState("");
@@ -69,12 +70,16 @@ function App() {
 
   return (
     <>
-      <Header token={token} onLogout={logOut} />
+    <MyContext.Provider value={{token, saveToken, logOut}}>
+      <Header 
+      // token={token} onLogout={logOut} 
+      />
       <main>
         {isAuthenticated ? (
           <Dashboard 
           // URL={API_URL} 
-          token={token} />
+          // token={token} 
+          />
         ) : (
           <div>
             <h3>Please Log in or Register</h3>
@@ -107,17 +112,20 @@ function App() {
               {authMethod === "login" ? (
                 <Login 
                 // URL={API_URL}
-                 saveToken={saveToken} />
+                //  saveToken={saveToken} 
+                 />
               ) : (
                 authMethod === "register" && <Register 
                 // URL={API_URL}
-                 saveToken={saveToken} />
+                //  saveToken={saveToken} 
+                 />
               )}
             </div>
           </div>
         )}
       </main>
       <Footer />
+      </MyContext.Provider>
     </>
   );
 }

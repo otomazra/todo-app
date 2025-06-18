@@ -1,5 +1,7 @@
-import React, { useReducer, useState } from "react";
+import React, { useReducer, useState, useContext } from "react";
 import axios from "axios";
+import { DashContext } from "./DashContext.js";
+import { MyContext } from "./MyContext.js";
 // import circle from "../assets/add-circle.svg";
 
 const initialState = { newText: "", inputToggle: false };
@@ -23,6 +25,10 @@ function reducer(state, action) {
 function Create(props) {
   // const [newText, setNewText] = useState("");
   // const [inputToggle, setInputToggle] = useState(false);
+
+  const {token}=useContext(MyContext);
+  const {change} = useContext(DashContext);
+
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const handleChange = (event) => {
@@ -48,7 +54,7 @@ function Create(props) {
         },
         {
           headers: {
-            Authorization: `Bearer ${props.token}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -60,7 +66,8 @@ function Create(props) {
         console.log("Success: ", data);
         // setInputToggle(false);
         // dispatch({type: 'toggled'});
-        props.updateList();
+        // props.updateList();
+        change();
       }
     } catch (error) {
 

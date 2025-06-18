@@ -1,9 +1,13 @@
 import axios from "axios";
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, useContext, createContext } from "react";
 import TodoList from "./TodoList.jsx";
 import Create from "./Create.jsx";
+import { MyContext } from "./MyContext.js";
+import {DashContext} from "./DashContext.js";
 
-const receive = async (token, URL) => {
+// const receive = async (token, URL) => {
+const receive = async (token) => {
+
   console.log(token);
   const result = await axios.get(`api/dashboard`, {
     headers: {
@@ -28,19 +32,25 @@ function reducer(state, action) {
     case 'gotError': {
       return {...state, error: action.payload};
     }
+    default: 
+    return state;
   }
 }
 
-export default function Dashboard(props) {
+// export default function Dashboard(props) {
+export default function Dashboard() {
+
   // const [list, setList] = useState([]);
   // const [error, setError] = useState("");
   // const [change, setChange] = useState(null);
   const [state, dispatch] = useReducer(reducer, initialState);
+  const {token} = useContext(MyContext);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await receive(props.token, props.URL);
+        // const data = await receive(token, props.URL);
+        const data = await receive(token);
         console.log(data);
         console.log("Type: ", typeof data);
 
@@ -53,7 +63,7 @@ export default function Dashboard(props) {
       }
     };
     fetchData();
-  }, [props.token, state.change]);
+  }, [token, state.change]);
 
   console.log("list", state.list);
 
@@ -68,17 +78,19 @@ export default function Dashboard(props) {
         <p>{state.error}</p>
       ) : (
         <>
+        <DashContext.Provider value={{change: handleChange, array: state.list}}>
           <TodoList
-            URL={props.URL}
-            token={props.token}
-            change={handleChange}
-            array={state.list}
+            // URL={props.URL}
+            // token={token}
+            // change={handleChange}
+            // array={state.list}
           />
           <Create
-            URL={props.URL}
-            updateList={handleChange}
-            token={props.token}
+            // URL={props.URL}
+            // updateList={handleChange}
+            // token={token}
           />
+          </DashContext.Provider>
         </>
       )}
     </div>

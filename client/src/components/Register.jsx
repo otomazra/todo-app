@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
+import {MyContext} from "./MyContext";
+// export default function Register(props) {
+export default function Register() {
 
-export default function Register(props) {
+  const {saveToken} = useContext(MyContext);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -30,7 +34,7 @@ export default function Register(props) {
       const token = data.token;
       console.log(data);
       console.log(token);
-      props.saveToken(token);
+      saveToken(token);
     } catch (error) {
       console.log({ error: error.message });
     }

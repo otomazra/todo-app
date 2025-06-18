@@ -1,20 +1,51 @@
 import React from "react";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useReducer, useContext } from "react";
+import {DashContext} from "./DashContext.js";
+import { MyContext } from "./MyContext.js";
 
-export default function TodoList(props) {
-  const [editId, setEditId] = useState(null);
-  const [newTodo, setNewTodo] = useState("");
+const initialState={editId: null, newTodo: ''};
+
+function reducer(state, action){
+  switch (action.type){
+    case 'toggledEdit': {
+      console.log("New text: ", state.newTodo);
+      return ({...state, editId: action.id, newTodo: action.todo});
+    }
+    case "changed": {
+      return ({...state, newTodo: action.value});
+    }
+    case 'reset': {
+      return ({...state, editId: null});
+    }
+    default: {
+      return state;
+    }
+  }
+
+}
+
+// export default function TodoList(props) {
+export default function TodoList() {
+
+  const {change, array} = useContext(DashContext);
+  const {token} = useContext(MyContext);
+  // const [editId, setEditId] = useState(null);
+  // const [newTodo, setNewTodo] = useState("");
   // const [editId, setEditId] = useState(null);
 
+  const [state, dispatch] = useReducer(reducer, initialState);
+
   const handleEditToggle = (todo) => {
-    setEditId(todo.id);
-    setNewTodo(todo.todo);
+    dispatch({type: 'toggledEdit', id: todo.id, todo: todo.todo});
+    // setNewTodo(todo.todo);
+    dispatch({type: 'edited', todo: todo.todo});
     console.log("New text: ", newTodo);
   };
 
   const handleChange = (event) => {
-    setNewTodo(event.target.value);
+    // setNewTodo(event.target.value);
+    dispatch({type: 'changed', value: event.target.value});
   };
 
   // const passEditId = (id)=>{
@@ -31,13 +62,13 @@ export default function TodoList(props) {
     console.log("handleDelete is working");
     const result = await axios.delete(`api/delete/${id}`, {
       headers: {
-        Authorization: `Bearer ${props.token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     const data = result.data;
     console.log(result);
     console.log(data);
-    props.change();
+    change();
   };
 
   const handleEdit = async (event, id) => {
@@ -46,24 +77,25 @@ export default function TodoList(props) {
     const result = await axios.patch(
       `api/update/${id}`,
       {
-        newTodo: newTodo,
+        newTodo: state.newTodo,
       },
       {
         headers: {
-          Authorization: `Bearer ${props.token}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
     console.log(result.data);
-    setEditId(null);
-    props.change();
+    // setEditId(null);
+    dispatch({type: "reset"});
+    change();
   };
 
-  const array = props.array;
-  const list = array.map((todo, index) => {
+  // const array = props.array;
+  const list = array.map((todo) => {
     return (
       <div className="todoListDiv" key={todo.id}>
-        {editId === todo.id ? (
+        {state.editId === todo.id ? (
           <>
             <form
               onSubmit={(event) => {
@@ -74,14 +106,15 @@ export default function TodoList(props) {
                 className="updateIntup"
                 name="updateInput"
                 onChange={handleChange}
-                value={newTodo}
+                value={state.newTodo}
               />
               <div className="buttonClass">
                 <button>Update</button>
                 <button
                   type="button"
                   onClick={() => {
-                    setEditId(null);
+                    // setEditId(null);
+                    dispatch({type: 'reset'});
                   }}
                 >
                   Cancel

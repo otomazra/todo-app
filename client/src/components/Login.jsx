@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
+import { MyContext } from "./MyContext";
 
-export default function Login(props) {
+// export default function Login(props) {
+export default function Login() {
+
+  const {saveToken} = useContext(MyContext);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -26,7 +31,7 @@ export default function Login(props) {
       const token = data["token"];
       console.log(data);
       console.log(token);
-      if (token) props.saveToken(token);
+      if (token) saveToken(token);
       return result.data;
     } catch (error) {
       console.log({ error: error.message });
