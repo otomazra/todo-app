@@ -1,42 +1,65 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import { MyContext } from "./MyContext";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 // export default function Login(props) {
+
+async function signIn({ email, password }) {
+  const result = await axios.post(`/api/login`, {
+    email: email,
+    password: password,
+  });
+  return result.data;
+}
+
 export default function Login() {
+  const { saveToken } = useContext(MyContext);
 
-  const {saveToken} = useContext(MyContext);
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // const emailChange = (event) => {
+  //   let email = event.currentTarget.value;
+  //   setEmail(email);
+  // };
 
-  const emailChange = (event) => {
-    let email = event.currentTarget.value;
-    setEmail(email);
-  };
+  // const passwordChange = (event) => {
+  //   let password = event.currentTarget.value;
+  //   setPassword(password);
+  // };
 
-  const passwordChange = (event) => {
-    let password = event.currentTarget.value;
-    setPassword(password);
-  };
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: signIn,
+    onSuccess: (data) => {
+      saveToken(data["token"]);
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
+    },
+  });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    try {
-      const result = await axios.post(`/api/login`, {
-        email: email,
-        password: password,
-      });
-      const data = result.data;
-      const token = data["token"];
-      console.log(data);
-      console.log(token);
-      if (token) saveToken(token);
-      return result.data;
-    } catch (error) {
-      console.log({ error: error.message });
-      return { error: error.message };
-    }
+    const email = event.target.elements.email.value;
+    const password = event.target.elements.password.value;
+    mutation.mutate({email, password});
+    // try {
+      // const result = await axios.post(`/api/login`, {
+      //   email: email,
+      //   password: password,
+      // });
+
+    //   const data = result.data;
+    //   const token = data["token"];
+    //   console.log(data);
+    //   console.log(token);
+    //   if (token) saveToken(token);
+    //   return result.data;
+    // } catch (error) {
+    //   console.log({ error: error.message });
+    //   return { error: error.message };
+    // }
   };
 
   return (
@@ -46,16 +69,16 @@ export default function Login() {
           type="text"
           name="email"
           className="email"
-          onChange={emailChange}
-          value={email}
+          // onChange={emailChange}
+          // value={email}
           placeholder="Email"
         />
         <input
           type="password"
           name="password"
           className="password"
-          onChange={passwordChange}
-          value={password}
+          // onChange={passwordChange}
+          // value={password}
           placeholder={"password"}
         />
         <input type="submit" value="Log In" className="loginSubmit" />

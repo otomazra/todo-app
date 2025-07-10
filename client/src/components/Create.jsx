@@ -1,80 +1,127 @@
 import React, { useReducer, useState, useContext } from "react";
 import axios from "axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DashContext } from "./DashContext.js";
 import { MyContext } from "./MyContext.js";
 // import circle from "../assets/add-circle.svg";
 
-const initialState = { newText: "", inputToggle: false };
+// const initialState = { newText: "", inputToggle: false };
 
-function reducer(state, action) {
-  switch (action.type) {
-    case "changed": {
-      return { ...state, newText: action.payload };
+// function reducer(state, action) {
+//   switch (action.type) {
+//     case "changed": {
+//       return { ...state, newText: action.payload };
+//     }
+//     case "toggled": {
+//       return { ...state, inputToggle: !state.inputToggle };
+//     }
+//     case "reset": {
+//       return { ...state, newText: "", inputToggle: false };
+//     }
+//     default:
+//       return state;
+//   }
+// }
+
+const addText = async (task, token) => {
+  // event.preventDefault();
+  try {
+    // const result = await axios.post(
+    //   props.URL + "/create",
+    const result = await axios.post(
+      `api/create`,
+      {
+        todo: task,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = result.data;
+    if (data) {
+      // setNewText("");
+      // dispatch({ type: "reset" });
+      console.log("Success: ", data);
+      return data;
+      // setInputToggle(false);
+      // dispatch({type: 'toggled'});
+      // props.updateList();
+      // change();
     }
-    case "toggled": {
-      return { ...state, inputToggle: !state.inputToggle };
-    }
-    case "reset": {
-      return { ...state, newText: "", inputToggle: false };
-    }
-    default:
-      return state;
+  } catch (error) {
+    console.log("Error: ", error.message);
   }
-}
+};
 
 function Create(props) {
   // const [newText, setNewText] = useState("");
   // const [inputToggle, setInputToggle] = useState(false);
 
-  const {token}=useContext(MyContext);
-  const {change} = useContext(DashContext);
+  const { token } = useContext(MyContext);
+  // const {change} = useContext(DashContext);
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  // const [state, dispatch] = useReducer(reducer, initialState);
 
-  const handleChange = (event) => {
-    // setNewText(event.target.value);
-    dispatch({ type: "changed", payload: event.target.value });
+  const queryClient = useQueryClient();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newOne = e.target.elements.newTodo.value;
+    mutation.mutate({newOne, token});
   };
 
-  const handleCancel = () => {
-    // setNewText("");
-    // setInputToggle(false);
-    dispatch({ type: "reset" });
-  };
+  const mutation = useMutation({
+    mutationFn: () => addText(task, token),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["otara"] });
+    },
+  });
 
-  const addText = async (event) => {
-    event.preventDefault();
-    try {
-      // const result = await axios.post(
-      //   props.URL + "/create",
-      const result = await axios.post(
-        `api/create`,
-        {
-          todo: state.newText,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+  // const handleChange = (event) => {
+  //   // setNewText(event.target.value);
+  //   dispatch({ type: "changed", payload: event.target.value });
+  // };
 
-      const data = result.data;
-      if (data) {
-        // setNewText("");
-        dispatch({ type: "reset" });
-        console.log("Success: ", data);
-        // setInputToggle(false);
-        // dispatch({type: 'toggled'});
-        // props.updateList();
-        change();
-      }
-    } catch (error) {
+  // const handleCancel = () => {
+  // setNewText("");
+  // setInputToggle(false);
+  // dispatch({ type: "reset" });
+  // };
 
-      console.log("Error: ", error.message);
-      
-    }
-  };
+  // const addText = async (event) => {
+  //   event.preventDefault();
+  //   try {
+  //     // const result = await axios.post(
+  //     //   props.URL + "/create",
+  //     const result = await axios.post(
+  //       `api/create`,
+  //       {
+  //         todo: state.newText,
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+
+  //     const data = result.data;
+  //     if (data) {
+  //       // setNewText("");
+  //       dispatch({ type: "reset" });
+  //       console.log("Success: ", data);
+  //       // setInputToggle(false);
+  //       // dispatch({type: 'toggled'});
+  //       // props.updateList();
+  //       // change();
+  //     }
+  //   } catch (error) {
+  //     console.log("Error: ", error.message);
+  //   }
+  // };
 
   return (
     <div className="create">
@@ -90,12 +137,13 @@ function Create(props) {
         </button>
       )}
       {state.inputToggle && (
-        <form onSubmit={addText}>
+        <form onSubmit={handleSubmit}>
           <input
             className="newTaskInput"
             type="text"
-            onChange={handleChange}
+            // onChange={handleChange}
             placeholder="Enter your task"
+            name="newTodo"
             value={state.newText}
           />
           <button type="submit" disabled={state.newText.length <= 1}>
