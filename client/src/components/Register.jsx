@@ -10,6 +10,7 @@ async function signUp({ email, password, confirmPassword }) {
     password: password,
     confirmPassword: confirmPassword,
   });
+  console.log(result.data.token);
   return result.data;
 }
 
@@ -38,7 +39,9 @@ export default function Register() {
     mutationFn: signUp,
     onSuccess: (data)=>{
       saveToken(data["token"]);
-      queryClient.invalidateQueries({queryKey: ["todos"]});
+      let id = data.info.id;
+      console.log(id);
+      queryClient.invalidateQueries({queryKey: ["register", id]});
     }
   });
 

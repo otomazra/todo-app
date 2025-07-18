@@ -35,8 +35,19 @@ function handleChange(e){
 
     const mutation = useMutation({
         mutationFn: addText,
-        onSuccess: ()=>{
-            queryClient.invalidateQueries({queryKey: ["otara"]});
+        onMutate: async(variables)=>{
+          const {todo, token} = variables;
+          await queryClient.cancelQueries(["todos"]);
+          const previousTodos = queryClient.getQueryData(["todos"]);
+          queryClient.setQueryData(["todos"], (old)=>{console.log("updating cache"); return [todo, ...old]});
+          console.log("Here is updated cache: ", previousTodos);
+          return {previousTodos};
+        },
+        onError: (err, variables, context) =>{
+          queryClient.setQueryData(["todos"], context.previousTodos);
+        },
+        onSettled: ()=>{
+            queryClient.invalidateQueries({queryKey: ["todos"]});
         }
     });
 
@@ -45,11 +56,12 @@ function handleChange(e){
         const todo = event.target.elements.newTask.value;
         console.log("Submitting todo ", todo);
         mutation.mutate({todo, token});
+        setNewTodo("");
     }
 
     return (
         <form onSubmit={handleSubmit}>
-            <input name="newTask" onChange={handleChange} className="newTaskInput"/>
+            <input name="newTask" onChange={handleChange} value={newTodo} className="newTaskInput"/>
             <button disabled={newTodo.length<=2}>Add Task</button>
         </form>
     )

@@ -100,16 +100,18 @@ const queryClient = useQueryClient();
 
 const mutateEdit = useMutation({
   mutationFn: editTodo,
-  onSuccess: ()=>{
+  // onSuccess: ()=>{
+    onSettled: ()=>{
     setEditId(null);
-    queryClient.invalidateQueries({queryKey:["otara"]});
+    queryClient.invalidateQueries({queryKey:["todos"]});
   }
 });
 
 const mutateDelete = useMutation({
   mutationFn: deleteTodo,
-  onSuccess: ()=>{
-    queryClient.invalidateQueries({queryKey: ["otara"]});
+  // onSuccess: ()=>{
+    onSettled: ()=>{
+    queryClient.invalidateQueries({queryKey: ["todos"]});
   }
 });
 
@@ -162,7 +164,7 @@ const mutateDelete = useMutation({
               }}
             >
               <input
-                className="updateIntup"
+                className="updateInput"
                 name="updateInput"
                 onChange={handleChange}
                 // value={state.newTodo}

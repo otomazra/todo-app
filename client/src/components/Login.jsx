@@ -35,7 +35,8 @@ export default function Login() {
     mutationFn: signIn,
     onSuccess: (data) => {
       saveToken(data["token"]);
-      queryClient.invalidateQueries({ queryKey: ["todos"] });
+      console.log("data:" +" token:"+data.token, "id: ", data.id);
+      queryClient.invalidateQueries({ queryKey: ["users", data.id] });
     },
   });
 

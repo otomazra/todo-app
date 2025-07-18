@@ -78,7 +78,7 @@ const enterSystem = async (user) => {
   console.log(token);
 
   if (!comparison) return null;
-  return token;
+  return {token, id: data.id} ;
 };
 
 const authenticateToken = (req, res, next) => {
@@ -139,9 +139,9 @@ app.post(
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
-      const checking = await enterSystem(req.body);
-      if (checking) {
-        return res.json({ token: checking });
+      const checkingData = await enterSystem(req.body);
+      if (checkingData) {
+        return res.json({ token: checkingData.token, id: checkingData.id });
       } else {
         return res.status(401).json({ message: "Invalid email or password" });
       }
@@ -178,12 +178,14 @@ app.post(
           console.log(userData);
           const data = await insertUserData(userData);
           console.log("Registration data inserted into the DB: ", data);
-          const token = await enterSystem({ email, password });
+          const signUpInfo = await enterSystem({ email, password });
+          const token = signUpInfo.token;
+          const id =signUpInfo.id;
           console.log({
             message: "Registration successful, here is your token: ",
-            token,
+            token, id: id,
           });
-          res.json({ token });
+          res.json({ token, id });
         } else {
           res.status(400).json({ message: "This email is already in use" });
         }

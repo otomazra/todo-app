@@ -49,7 +49,7 @@ export default function Dashboard() {
   const {token} = useContext(MyContext);
 
   const {data, isLoading, error} = useQuery({
-    queryKey: ["otara"],
+    queryKey: ["todos"],
     queryFn: ()=>receive(token),
   })
 
